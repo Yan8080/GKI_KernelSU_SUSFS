@@ -43,7 +43,7 @@ on:
         description: '是否开启增加更多ZRAM算法?'
         required: true
         type: boolean
-        default: false
+        default: true
       use_bbg:
         description: '是否开启BBG防格机补丁?（报错请关闭）'
         required: true
@@ -53,7 +53,7 @@ on:
         description: '是否开启KPM功能?'
         required: true
         type: boolean
-        default: true
+        default: false
       get_manager:
         description: '获取最新KSU管理器和SUS模块?'
         required: true
