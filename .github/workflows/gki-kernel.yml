@@ -385,7 +385,6 @@ jobs:
               -e '/^[[:space:]]*struct[[:space:]]+vm_area_struct[[:space:]]*\*[[:space:]]*vma[[:space:]]*;[[:space:]]*$/d' \
               -e 's/^([[:space:]]*)vma[[:space:]]*=[[:space:]]*find_vma[[:space:]]*\([[:space:]]*mm[[:space:]]*,[[:space:]]*start_vaddr[[:space:]]*\)[[:space:]]*;/\1struct vm_area_struct *vma = find_vma(mm, start_vaddr);/g' \
               ./fs/proc/task_mmu.c
-              fi
             fi
           fi
           
