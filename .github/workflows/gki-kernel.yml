@@ -375,10 +375,10 @@ jobs:
       - name: 一些修复补丁
         run: |
           cd "$CONFIG/common"
-          FORMATTED_BRANCH="${{ inputs.android_version }}-${{ inputs.kernel_version }}-${{ inputs.sub_level }}"
+          FORMATTED_BRANCH="${{ inputs.android_version }}-${{ inputs.kernel_version }}"
           # Fake Patch to fix failures
           fake_patched=0
-          if [ "$FORMATTED_BRANCH" = "android15-6.6" ]; then
+          if [ "$FORMATTED_BRANCH" == "android15-6.6" ]; then
             if ! grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c; then
               echo "未找到 nr_subpages,正在进行补丁修复"
               sed -E -i \
@@ -388,7 +388,7 @@ jobs:
             fi
           fi
           
-          if [ "$FORMATTED_BRANCH" = "android12-5.10" ] || [ "$FORMATTED_BRANCH" = "android13-5.15" ] || [ "$FORMATTED_BRANCH" = "android14-6.1" ]; then
+          if [ "$FORMATTED_BRANCH" == "android12-5.10" ] || [ "$FORMATTED_BRANCH" == "android13-5.15" ] || [ "$FORMATTED_BRANCH" == "android14-6.1" ]; then
             if ! grep -qxF $'\tif (!vma_pages(vma))' ./fs/proc/task_mmu.c; then
               echo "未找到 vma_pages,正在进行补丁修复"
               if grep -qxF $'\t\tgoto show_pad;' ./fs/proc/task_mmu.c; then
