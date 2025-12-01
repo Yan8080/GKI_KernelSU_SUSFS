@@ -373,6 +373,7 @@ jobs:
               if grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c; then
                 sed -i -e '/unsigned int nr_subpages \= __PAGE_SIZE \/ PAGE_SIZE;/d' -e '/pagemap_entry_t \*res = NULL;/d' ./fs/proc/task_mmu.c
               fi
+              sed -i -e 's/struct vm_area_struct *vma;/truct vm_area_struct *vma = NULL;/' ./fs/proc/task_mmu.c
             fi
           fi
           
