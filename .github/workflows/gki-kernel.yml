@@ -337,14 +337,8 @@ jobs:
           elif [ "${{ inputs.kernelsu_variant }}" == "MKSU" ]; then
             echo "Applying SUSFS patches for MKSU..."
             cd ./KernelSU
-
             cp ../../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./
             patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
-
-            # echo "Applying MKSU specific patches..."
-            # cp ../../zzh_patch/mksu_core_hook.c.patch ./
-            # patch -p1 --fuzz=3 < mksu_core_hook.c.patch
-
           elif [ "${{ inputs.kernelsu_variant }}" == "SukiSU" ]; then
             echo "Applying SUSFS patches for SukiSU..."
             cd ./KernelSU
@@ -355,14 +349,7 @@ jobs:
           fi
 
           cd ../common
-
-
           patch -p1 --fuzz=3 < 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch || true
-
-          # if [ "${{ inputs.kernelsu_variant }}" == "MKSU" ]; then
-          #   cp ../../zzh_patch/rm_devpt.patch ./
-          #   patch -p1 < rm_devpt.patch
-          # fi
 
           FORMATTED_BRANCH="${{ inputs.android_version }}-${{ inputs.kernel_version }}"
           if grep -q deprecated <<< "$REMOTE_BRANCH" && \
@@ -381,10 +368,11 @@ jobs:
           if [ "$FORMATTED_BRANCH" == "android15-6.6" ]; then
             if ! grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c; then
               echo "未找到 nr_subpages,正在进行补丁修复"
-              sed -E -i \
-              -e '/^[[:space:]]*struct[[:space:]]+vm_area_struct[[:space:]]*\*[[:space:]]*vma[[:space:]]*;[[:space:]]*$/d' \
-              -e 's/^([[:space:]]*)vma[[:space:]]*=[[:space:]]*find_vma[[:space:]]*\([[:space:]]*mm[[:space:]]*,[[:space:]]*start_vaddr[[:space:]]*\)[[:space:]]*;/\1struct vm_area_struct *vma = find_vma(mm, start_vaddr);/g' \
+              sed -i -e '/int ret = 0, copied = 0;/a \\tunsigned int nr_subpages \= __PAGE_SIZE \/ PAGE_SIZE;' -e '/int ret = 0, copied = 0;/a \\tpagemap_entry_t \*res = NULL;' \
               ./fs/proc/task_mmu.c
+              if grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c; then
+                sed -i -e '/unsigned int nr_subpages \= __PAGE_SIZE \/ PAGE_SIZE;/d' -e '/pagemap_entry_t \*res = NULL;/d' ./fs/proc/task_mmu.c
+              fi
             fi
           fi
           
