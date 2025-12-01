@@ -367,17 +367,17 @@ jobs:
           fake_patched=0
           if [ "$FORMATTED_BRANCH" == 'android15-6.6' ]; then
             echo -e "正在对${FORMATTED_BRANCH}进行补丁修复..."
-            if [ "10#${{ inputs.sub_level }}" -lt 50 ]; then
+            if [ "${{ inputs.sub_level }}" -lt 50 ]; then
               echo "发现6.6低版本,正在进行补丁修复"
               sed -i -e 's/struct vm_area_struct \*vma;/struct vm_area_struct \*vma \= NULL;/' ./fs/proc/task_mmu.c
             fi
-            if ![ grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c ]; then
+            if ! grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c; then
               echo "未找到 nr_subpages,正在进行补丁修复"
               sed -i \
               -e '/int ret = 0, copied = 0;/a \\tunsigned int nr_subpages \= __PAGE_SIZE \/ PAGE_SIZE;' \
               -e '/int ret = 0, copied = 0;/a \\tpagemap_entry_t \*res = NULL;' \
               ./fs/proc/task_mmu.c
-              if [ grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c ]; then
+              if grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c; then
                 sed -i -e '/unsigned int nr_subpages \= __PAGE_SIZE \/ PAGE_SIZE;/d' -e '/pagemap_entry_t \*res = NULL;/d' \
                 ./fs/proc/task_mmu.c
               fi
@@ -386,9 +386,9 @@ jobs:
           
           if [ "$FORMATTED_BRANCH" == 'android12-5.10' ] || [ "$FORMATTED_BRANCH" == 'android13-5.15' ] || [ "$FORMATTED_BRANCH" == 'android14-6.1' ]; then
             echo -e "正在对${FORMATTED_BRANCH}进行补丁修复..."
-            if ![ grep -qxF $'\tif (!vma_pages(vma))' ./fs/proc/task_mmu.c ]; then
+            if ! grep -qxF $'\tif (!vma_pages(vma))' ./fs/proc/task_mmu.c; then
               echo "未找到 vma_pages,正在进行补丁修复"
-              if [ grep -qxF $'\t\tgoto show_pad;' ./fs/proc/task_mmu.c ]; then
+              if grep -qxF $'\t\tgoto show_pad;' ./fs/proc/task_mmu.c; then
                 sed -i -e 's/goto show_pad;/return 0;/' ./fs/proc/task_mmu.c
               fi
             fi
