@@ -349,6 +349,10 @@ jobs:
           fi
 
           cd ../common
+          if { [ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == 'android15-6.6' ] && [ "${{ inputs.sub_level }}" -lt 50 ] }; then
+            echo "发现6.6低版本,正在进行补丁修复"
+            sed -i 's/-32,12 +32,38/-32,11 +32,37/g' 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
+          fi
           patch -p1 --fuzz=3 < 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch || true
 
           FORMATTED_BRANCH="${{ inputs.android_version }}-${{ inputs.kernel_version }}"
@@ -367,10 +371,6 @@ jobs:
           fake_patched=0
           if [ "$FORMATTED_BRANCH" == 'android15-6.6' ]; then
             echo -e "正在对${FORMATTED_BRANCH}进行补丁修复..."
-            if [ "${{ inputs.sub_level }}" -lt 50 ]; then
-              echo "发现6.6低版本,正在进行补丁修复"
-              sed -i -e 's/struct vm_area_struct \*vma;/struct vm_area_struct \*vma \= NULL;/' ./fs/proc/task_mmu.c
-            fi
             if ! grep -qxF $'\tunsigned int nr_subpages = __PAGE_SIZE / PAGE_SIZE;' ./fs/proc/task_mmu.c; then
               echo "未找到 nr_subpages,正在进行补丁修复"
               sed -i \
