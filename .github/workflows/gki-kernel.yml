@@ -349,7 +349,7 @@ jobs:
           fi
 
           cd ../common
-          if { [ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == 'android15-6.6' ] && [ "${{ inputs.sub_level }}" -lt 50 ] }; then
+          if { [ "${{ inputs.android_version }}-${{ inputs.kernel_version }}" == 'android15-6.6' ] && [ "${{ inputs.sub_level }}" -lt 50 ]; }; then
             echo "发现6.6低版本,正在进行补丁修复"
             sed -i 's/-32,12 +32,38/-32,11 +32,37/g' 50_add_susfs_in_gki-${{ inputs.android_version }}-${{ inputs.kernel_version }}.patch
           fi
