@@ -5,7 +5,7 @@
 > 第一次使用务必**详细阅读**以下内容，不要因为懒惰而占用他人时间！
 >
 > SUKISU，编译时的Dev/Stable，追求稳定选择Stable；
-> KSU的稳定版是最新TAG，也就是[v2.0.0](https://github.com/tiann/KernelSU/tree/v1.0.5)，但目前无法编译）
+> KSU的稳定版是最新TAG。
 
 KSU-NEXT:
  - ~~Maintenance for KSU-NEXT (KSUN) has been permanently discontinued.(KSUN永久停更)，[见/see](https://github.com/zzh20188/GKI_KernelSU_SUSFS/releases/tag/v1.5.12-r5)~~
