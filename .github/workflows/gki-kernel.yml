@@ -541,7 +541,7 @@ jobs:
           # Add KSU configuration settings
           echo "CONFIG_KSU=y" >> ./common/arch/arm64/configs/gki_defconfig
 
-          if ${{ inputs.use_kpm }}; then
+          if [ "${{ inputs.kernelsu_variant }}" == "SukiSU" && ${{ inputs.use_kpm }} ]; then
             echo "CONFIG_KPM=y" >> ./common/arch/arm64/configs/gki_defconfig
           fi
           
