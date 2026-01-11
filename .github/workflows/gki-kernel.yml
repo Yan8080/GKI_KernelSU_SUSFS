@@ -80,6 +80,9 @@ jobs:
           remove-haskell: 'true'
           remove-codeql: 'true'
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: 设定 CONFIG 环境变量
         run: |
           # Set CONFIG dynamically based on inputs values
