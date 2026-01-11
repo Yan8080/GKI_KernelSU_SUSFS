@@ -550,8 +550,16 @@ jobs:
           echo "Adding BBG..."
           wget -O- https://github.com/vc-teahouse/Baseband-guard/raw/main/setup.sh | bash
           echo "CONFIG_BBG=y" >> common/arch/arm64/configs/gki_defconfig
-          sed -i '/^config LSM$/,/^help$/{ /^[[:space:]]*default/ { /baseband_guard/! s/selinux/selinux,baseband_guard/ } }' $SECURITY_KCONFIG
-      
+          if [ -d "$CONFIG/security" ]; then
+            SECURITY_DIR="$CONFIG/security"
+          elif [ -d "$CONFIG/common/security" ]; then
+            SECURITY_DIR="$CONFIG/common/security"
+          else
+            echo '[ERROR] "security/" directory not found.'
+            exit 127
+          fi
+          sed -i '/^config LSM$/,/^help$/{ /^[[:space:]]*default/ { /baseband_guard/! s/selinux/selinux,baseband_guard/ } }' "$SECURITY_DIR/Kconfig"
+
       - name: Append ashmem exports if missing
         if: matrix.kernel_config.android_version != 'android12' && matrix.kernel_config.android_version != 'android13' && matrix.kernel_config.android_version != 'android14' && matrix.kernel_config.android_version != 'android15'
         run: |
