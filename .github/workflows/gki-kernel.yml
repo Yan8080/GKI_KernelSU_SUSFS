@@ -549,7 +549,7 @@ jobs:
           echo "Adding BBG..."
           wget -O- https://github.com/vc-teahouse/Baseband-guard/raw/main/setup.sh | bash
           echo "CONFIG_BBG=y" >> common/arch/arm64/configs/gki_defconfig
-          sed -i '/^config LSM$/,/^help$/{ /^[[:space:]]*default/ { /baseband_guard/! s/selinux/selinux,baseband_guard/ } }' /common/security/Kconfig
+          sed -i '/^config LSM$/,/^help$/{ /^[[:space:]]*default/ { /baseband_guard/! s/selinux/selinux,baseband_guard/ } }' common/security/Kconfig
 
       - name: Append ashmem exports if missing
         if: matrix.kernel_config.android_version != 'android12' && matrix.kernel_config.android_version != 'android13' && matrix.kernel_config.android_version != 'android14' && matrix.kernel_config.android_version != 'android15'
