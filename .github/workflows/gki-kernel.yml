@@ -549,15 +549,6 @@ jobs:
           cd "$CONFIG"
           echo "Adding BBG..."
           wget -O- https://github.com/vc-teahouse/Baseband-guard/raw/main/setup.sh | bash
-          
-          if [ -d "$CONFIG/security" ]; then
-            SECURITY_DIR="$CONFIG/security"
-          elif [ -d "$CONFIG/common/security" ]; then
-            SECURITY_DIR="$CONFIG/common/security"
-          else
-            echo '[ERROR] "security/" directory not found.'
-            exit 127
-          fi
           echo "CONFIG_BBG=y" >> common/arch/arm64/configs/gki_defconfig
 
       - name: Append ashmem exports if missing
