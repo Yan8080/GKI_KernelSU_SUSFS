@@ -885,8 +885,10 @@ jobs:
           CONFIG_TMPFS_POSIX_ACL=y
           EOF
 
-          if [ "${{ inputs.ksu_variant }}" == "SukiSU" ] || [ "${{ inputs.ksu_variant }}" == "ReSukiSU" ] || [ "${{ inputs.ksu_variant }}" == "Next" ]; then
-            echo "CONFIG_KPM=y" >> "$DEFCONFIG"
+          if [ "${{ inputs.use_kpm }}" ]; then
+            if [ "${{ inputs.ksu_variant }}" == "SukiSU" ] || [ "${{ inputs.ksu_variant }}" == "ReSukiSU" ] || [ "${{ inputs.ksu_variant }}" == "Next" ]; then
+              echo "CONFIG_KPM=y" >> "$DEFCONFIG"
+            fi
           fi
 
           sed -i 's/check_defconfig//' ./common/build.config.gki
